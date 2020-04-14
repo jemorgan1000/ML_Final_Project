@@ -137,6 +137,15 @@ def make_dur_nums(dur_df):
 	"""
 	pass
 
+def main2():
+	dir_path = os.getcwd()
+	data_path = osp.abspath(osp.join(dir_path,"Data/"))
+	stop_path = osp.join(data_path, "stops.txt")
+	shape_path = osp.join(data_path,'census.dbf')
+	trips_path = osp.join(data_path,'odx/trips.csv')
+	out_path = osp.join(data_path,'preprocessed_data2.csv')
+	stops = get_stops(stop_path)
+
 
 def main():
 	# setting up the path information
@@ -145,7 +154,7 @@ def main():
 	stop_path = osp.join(data_path, "stops.txt")
 	shape_path = osp.join(data_path,'census.dbf')
 	trips_path = osp.join(data_path,'odx/trips.csv')
-	out_path = osp.join(data_path,'preprocessed_data.csv')
+	out_path = osp.join(data_path,'preprocessed_data2.csv')
 	#
 	stops = get_stops(stop_path)
 	blocks = get_blocks(shape_path)
@@ -159,4 +168,4 @@ def main():
 
 
 if __name__ == '__main__':
-	main()
+	main2()
