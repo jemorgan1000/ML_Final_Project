@@ -63,6 +63,11 @@ db.sqlite3-journal
 
 #Mac Stuff:
 .DS_Store
+*.xml
+*.prj
+*.cpg
+*.dbf
+
 
 #Data Files:
 *.csv
