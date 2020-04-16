@@ -52,12 +52,6 @@ def add_commute_time(trips_df):
 		((trips_df.start_time.dt.hour >= 16) & (trips_df.start_time.dt.hour < 20)) * 1)
 	return trips_df
 
-def identify_commuters(trips_df):
-	"""
-	This function identifies each trip as either a commuter or not
-	:param trips_df:
-	:return:
-	"""
 
 def create_UID(combined):
 	"""
@@ -78,9 +72,13 @@ def preprocess_combo(combined):
 	stops_rides = combined.groupby("UID")['stop_id'].size()
 	stops_rides = stops_rides.reset_index()
 	stops_rides.rename({0:"STOPS"},axis=1,inplace=True)
+	rail_rides = combined.groupby("UID")["RAIL_STOP"].sum()
+	rail_rides = rail_rides.reset_index()
+	rail_rides.rename({0:"STOPS"},axis=1,inplace=True)
 	trips = combined.groupby("UID")['TRIPS'].sum()
 	trips = trips.reset_index()
 	stops_rides = stops_rides.merge(trips,on='UID')
+	stops_rides = stops_rides.merge(rail_rides,on='UID')
 	return stops_rides
 
 def join_stops(blocks, stops):
@@ -137,21 +135,13 @@ def make_dur_nums(dur_df):
 	"""
 	pass
 
-def main2():
-	dir_path = os.getcwd()
-	data_path = osp.abspath(osp.join(dir_path,"Data/"))
-	stop_path = osp.join(data_path, "stops.txt")
-	shape_path = osp.join(data_path,'census.dbf')
-	trips_path = osp.join(data_path,'odx/trips.csv')
-	out_path = osp.join(data_path,'preprocessed_data2.csv')
-	stops = get_stops(stop_path)
 
 
 def main():
 	# setting up the path information
 	dir_path = os.getcwd()
 	data_path = osp.abspath(osp.join(dir_path,"Data/"))
-	stop_path = osp.join(data_path, "stops.txt")
+	stop_path = osp.join(data_path, "stops.csv")
 	shape_path = osp.join(data_path,'census.dbf')
 	trips_path = osp.join(data_path,'odx/trips.csv')
 	out_path = osp.join(data_path,'preprocessed_data2.csv')
@@ -164,8 +154,9 @@ def main():
 	combined = join_trips(combined,num_rides)
 	combined = create_UID(combined)
 	final_df = preprocess_combo(combined)
+	#print(final_df.head())
 	output_data(out_path, final_df)
 
 
 if __name__ == '__main__':
-	main2()
+	main()
